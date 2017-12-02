@@ -1,2 +1,10 @@
+# python temp files
 *.pyc
+__pycache__/
+
+# secrets
 secrets.yml
+secrets-sandbox.yml
+
+# log files
+logs/

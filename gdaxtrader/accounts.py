@@ -8,13 +8,13 @@ class Info(object):
         self.refresh()
 
     def refresh(self):
-        self.__resp = requests.get(common.api_url + 'accounts', auth=common.auth)
-        self.__accounts = {}
-        for acct in self.__resp.json():
-            self.__accounts[acct['currency']] = {k: v for k, v in acct.items() if k != 'currency'}
+        self._resp = requests.get(common.api_url + 'accounts', auth=common.auth)
+        self._accounts = {}
+        for acct in self._resp.json():
+            self._accounts[acct['currency']] = {k: v for k, v in acct.items() if k != 'currency'}
 
     def currencies(self):
-        return self.__accounts.keys()
+        return self._accounts.keys()
 
     def available(self, currency):
-        return self.__accounts[currency]['available']
+        return float(self._accounts[currency]['available'])
