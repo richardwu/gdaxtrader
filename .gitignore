@@ -8,3 +8,6 @@ secrets-sandbox.yml
 
 # log files
 logs/
+
+# plots
+plots/

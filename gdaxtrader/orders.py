@@ -29,7 +29,7 @@ class _CommonOrder(object):
 
         dict order_params: side + order_type specific arguments.
 
-        Returns the order ID (if the order went through) and the status code.
+        Returns the order ID (if the order went through) and the full response object.
         """
 
         # Prevent multiple invocations with the same OID.
@@ -64,7 +64,7 @@ class _CommonOrder(object):
         log.info('body:')
         log.info(self.__resp.json())
 
-        return self.oid(), self.__resp.status_code
+        return self.oid(), self.__resp
 
     def oid(self):
         if self.__resp is None or 'id' not in self.__resp.json():
@@ -101,13 +101,19 @@ class Limit(_CommonOrder):
         """
         Tries to execute the limit order.
 
-        Returns the order ID (if the order went through) and the status code.
+        Returns the order ID (if the order went through) and the full response object.
         """
 
         return super().place(self._order_params)
 
 
 def get_open(product=None, limit=100):
+    """
+    Retrieves all open orders (open, pending, and active).
+
+    Returns a list of orders and the full response object.
+    """
+
     params = {
             'limit': limit,
             'product_id': product,
@@ -115,13 +121,19 @@ def get_open(product=None, limit=100):
 
     resp = requests.get(
             common.api_url + 'orders',
-            data=json.dumps(params),
+            params=params,
             auth=common.auth,
             )
 
-    return resp.json(), resp.status_code
+    return resp.json(), resp
 
 def get_filled(product='all', limit=100):
+    """
+    Retrieves all filled orders.
+
+    Returns the list of orders and the full response object.
+    """
+
     params = {
             'limit': limit,
             'product_id': product,
@@ -129,17 +141,17 @@ def get_filled(product='all', limit=100):
 
     resp = requests.get(
             common.api_url + 'fills',
-            data=json.dumps(params),
+            params=params,
             auth=common.auth,
             )
 
-    return resp.json(), resp.status_code
+    return resp.json(), resp
 
 def get_by_oid(oid):
     """
     Retrieves information on the order by GDAX's order ID.
 
-    Returns JSON information if the order exists and the status code.
+    Returns JSON information if the order exists and the full response object.
     """
 
     resp = requests.get(
@@ -147,4 +159,4 @@ def get_by_oid(oid):
             auth=common.auth,
             )
 
-    return resp.json(), resp.status_code
+    return resp.json(), resp

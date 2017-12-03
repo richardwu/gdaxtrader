@@ -20,10 +20,13 @@ class CoinbaseExchangeAuth(AuthBase):
         timestamp = str(time.time())
 
         log.info('executing AUTHENTICATED request')
+        log.info('timestamp: ' + timestamp)
         log.info('method: ' + request.method)
         log.info('url: ' + request.url)
-        log.info('body: ' + request.body)
-        log.info('timestamp: ' + timestamp)
+
+        # Only POST requests have a body; GET requests encode directly into url
+        if request.method == 'POST':
+            log.info('body: ' + request.body)
 
         request.headers.update(self.auth_header(
                 timestamp,

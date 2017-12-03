@@ -3,8 +3,11 @@
 import yaml
 import time
 
+def fmttime(timeobj):
+    return time.strftime("%Y-%m-%dT%H_%M_%S", timeobj)
+
 start_time = time.gmtime()
-start_time_str = time.strftime("%Y-%m-%dT%H_%M_%S", start_time)
+start_time_str = fmttime(start_time)
 
 # Logger singleton
 # Must come before all other custom modules that use logging (e.g. auth).
