@@ -7,6 +7,7 @@ import base64
 import time
 import requests
 from requests.auth import AuthBase
+from datetime import datetime
 
 from common import log
 
@@ -17,16 +18,12 @@ class CoinbaseExchangeAuth(AuthBase):
         self.passphrase = passphrase
 
     def __call__(self, request):
-        timestamp = str(time.time())
+        raw_time = time.time()
+        timestamp = str(raw_time)
 
         log.info('executing AUTHENTICATED request')
-        log.info('timestamp: ' + timestamp)
-        log.info('method: ' + request.method)
-        log.info('url: ' + request.url)
-
-        # Only POST requests have a body; GET requests encode directly into url
-        if request.method == 'POST':
-            log.info('body: ' + request.body)
+        log.info('unix timestamp: ' + timestamp)
+        log.info('UTC ISO8601: ' + datetime.utcfromtimestamp(raw_time).isoformat())
 
         request.headers.update(self.auth_header(
                 timestamp,
@@ -34,7 +31,6 @@ class CoinbaseExchangeAuth(AuthBase):
                 request.path_url,
                 request.body,
                 ))
-
 
         return request
 

@@ -11,3 +11,6 @@ logs/
 
 # plots
 plots/
+
+# notebook files
+.ipynb_checkpoints/

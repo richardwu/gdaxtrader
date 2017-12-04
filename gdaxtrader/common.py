@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
+from __init__ import __location__
+
 import yaml
 import time
+import os
+
 
 def fmttime(timeobj):
     return time.strftime("%Y-%m-%dT%H_%M_%S", timeobj)
@@ -23,7 +27,7 @@ _secrets_fname = 'secrets.yml'
 # _secrets_fname = 'secrets-sandbox.yml'
 
 _secrets = None
-with open(_secrets_fname, 'r', encoding='utf-8') as f:
+with open(os.path.join(__location__,  _secrets_fname), 'r', encoding='utf-8') as f:
     _secrets = yaml.safe_load(f)
 
 # Auth object for GDAX requests

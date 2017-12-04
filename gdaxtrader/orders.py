@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-import requests
 import json
 
 import common
 from common import log
+import httpapi
 
 class ParamsError(BaseException):
     pass
@@ -45,24 +45,12 @@ class _CommonOrder(object):
             }
         data.update(order_params)
 
-        log.info('placing ORDER with params:')
-        log.info(data)
-
-        self.__resp = requests.post(
+        log.info('placing ORDER')
+        self.__resp = httpapi.post(
                 common.api_url + 'orders',
                 data=json.dumps(data),
                 auth=common.auth,
             )
-
-        log.info('sent REQUEST: ' + self.__resp.url)
-        log.info(data)
-        # Do not log headers since they contain secrets.
-
-        log.info('received RESPONSE:')
-        log.info('code: ' + str(self.__resp.status_code))
-        log.info('reason: ' + self.__resp.reason)
-        log.info('body:')
-        log.info(self.__resp.json())
 
         return self.oid(), self.__resp
 
@@ -119,7 +107,9 @@ def get_open(product=None, limit=100):
             'product_id': product,
             }
 
-    resp = requests.get(
+    log.info('getting all OPEN ORDERS')
+
+    resp = httpapi.get(
             common.api_url + 'orders',
             params=params,
             auth=common.auth,
@@ -139,7 +129,9 @@ def get_filled(product='all', limit=100):
             'product_id': product,
             }
 
-    resp = requests.get(
+    log.info('getting all FILLED ORDERS')
+
+    resp = httpapi.get(
             common.api_url + 'fills',
             params=params,
             auth=common.auth,
@@ -154,7 +146,9 @@ def get_by_oid(oid):
     Returns JSON information if the order exists and the full response object.
     """
 
-    resp = requests.get(
+    log.info('getting ORDER by OID')
+
+    resp = httpapi.get(
             common.api_url + 'orders/' + oid,
             auth=common.auth,
             )

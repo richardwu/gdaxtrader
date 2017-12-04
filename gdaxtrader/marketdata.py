@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 import common
 from common import log
+import httpapi
 
 # GDAX max number of ticks per request.
 # In reality, this seems to be around ~400.
@@ -36,10 +37,7 @@ def get_rates(product, start_dt=None, end_dt=None, sec_per_tick=5):
             }
 
     log.info('getting HISTORIC RATES')
-    log.info('params:')
-    log.info(params)
-
-    resp = requests.get(
+    resp = httpapi.get(
             common.api_url + 'products/' + product + '/candles',
             params=params,
             auth=common.auth,
