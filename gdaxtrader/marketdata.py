@@ -43,4 +43,19 @@ def get_rates(product, start_dt=None, end_dt=None, sec_per_tick=5):
             auth=common.auth,
             )
 
-    return resp.json(), resp
+    rates = resp.json()
+
+    if resp.status_code == 200 and len(rates) > 0:
+        fetched_start = datetime.utcfromtimestamp(rates[-1][0])
+        fetched_end = datetime.utcfromtimestamp(rates[0][0])
+
+        # TODO(richardwu): For some reason GDAX over-extends and returns
+        # values < cur_start.
+        # assert(fetched_start >= cur_start)
+        if fetched_start < cur_start:
+            log.warn('KNOWN BUG: HISTORIC RATES fetched_start < cur_start')
+            log.warn('fetched_start: ' + fetched_start.isoformat())
+            log.warn('cur_start: ' + cur_start.isoformat())
+        assert(fetched_end <= cur_end)
+
+    return rates, resp

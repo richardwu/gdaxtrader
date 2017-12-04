@@ -1,0 +1,7 @@
+# This database will used to store and cache market data for re-use.
+# It is recommend that you use CockroachDB (https://github.com/cockroachdb/cockroach).
+
+db_name: gdaxtrader
+db_user: root
+host: localhost
+port: 26257

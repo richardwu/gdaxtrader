@@ -19,10 +19,10 @@ def get(url, **kwargs):
     resp = requests.get(url, **kwargs, timeout=_timeout)
 
     log.info('GET request completed in ' + str(resp.elapsed.total_seconds()) + 's.')
-    log.info('status: ' + str(resp.status_code))
+    log.info('status code: ' + str(resp.status_code))
     log.info('reason: ' + str(resp.reason))
-    log.info('response:')
-    log.info(resp.json())
+    log.info('response:', stderr=False)
+    log.info(resp.json(), stderr=False)
 
     return resp
 
@@ -38,9 +38,9 @@ def post(url, **kwargs):
     resp = requests.post(url, **kwargs, timeout=_timeout)
 
     log.info('POST request completed in ' + str(resp.elapsed.total_seconds()) + 's.')
-    log.info('status: ' + str(resp.status_code))
+    log.info('status code: ' + str(resp.status_code))
     log.info('reason: ' + str(resp.reason))
-    log.info('response:')
-    log.info(resp.json())
+    log.info('response:', stderr=False)
+    log.info(resp.json(), stderr=False)
 
     return resp

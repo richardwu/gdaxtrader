@@ -14,3 +14,6 @@ plots/
 
 # notebook files
 .ipynb_checkpoints/
+
+# cockroachdb files
+cockroach-data/

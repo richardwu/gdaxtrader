@@ -12,14 +12,14 @@ _log_dir = 'logs'
 
 
 class Logger(object):
-    def __init__(self):
+    def __init__(self, start_time):
 
         # Logging configuration
         if not os.path.exists(_log_dir):
             os.makedirs(_log_dir)
 
         handler = logging.FileHandler(os.path.join(_log_dir, 'gdaxtrader.' +
-            common.start_time_str + '.log'), mode='w')
+            common.fmttime(start_time) + '.log'), mode='w')
 
         formatter = logging.Formatter(
                 fmt='%(asctime)s %(levelname)-8s %(message)s',
@@ -39,7 +39,15 @@ class Logger(object):
     def warn(self, message):
         self._logger.warning(message)
 
-    def info(self, message):
+    def info(self, message, stderr=True):
+        # Temporarily sidestep stderr stream handler.
+        if not stderr:
+            temp = self._logger.handlers
+            self._logger.handlers = [h for h in self._logger.handlers if not isinstance(h, logging.StreamHandler)]
+            self._logger.info(message)
+            self._logger.handlers = temp
+            return
+
         self._logger.info(message)
 
     def debug(self, message):

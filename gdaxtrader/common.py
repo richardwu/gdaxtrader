@@ -11,12 +11,11 @@ def fmttime(timeobj):
     return time.strftime("%Y-%m-%dT%H_%M_%S", timeobj)
 
 start_time = time.gmtime()
-start_time_str = fmttime(start_time)
 
 # Logger singleton
 # Must come before all other custom modules that use logging (e.g. auth).
 import logger
-log = logger.Logger()
+log = logger.Logger(start_time)
 
 import auth
 
@@ -29,6 +28,11 @@ _secrets_fname = 'secrets.yml'
 _secrets = None
 with open(os.path.join(__location__,  _secrets_fname), 'r', encoding='utf-8') as f:
     _secrets = yaml.safe_load(f)
+
+_db_config_fname = 'database.yml'
+dbconfig = None
+with open(os.path.join(__location__,  _db_config_fname), 'r', encoding='utf-8') as f:
+    dbconfig = yaml.safe_load(f)
 
 # Auth object for GDAX requests
 auth = auth.CoinbaseExchangeAuth(_secrets['publickey'], _secrets['secretkey'], _secrets['passphrase'])
