@@ -16,6 +16,11 @@ _batch_sz = 500
 _fetch_delay = 800 / 1000
 
 def get_rates(product, start_dt, end_dt, sec_per_tick):
+    """
+    Returns the rates with the schema
+        [unix time, low, high, open, close, volume]
+    for the specified product and time interval.
+    """
     cur_end = end_dt
 
     all_rates = []

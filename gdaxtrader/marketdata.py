@@ -50,12 +50,12 @@ def get_rates(product, start_dt=None, end_dt=None, sec_per_tick=5):
         fetched_end = datetime.utcfromtimestamp(rates[0][0])
 
         # TODO(richardwu): For some reason GDAX over-extends and returns
-        # values < cur_start.
-        # assert(fetched_start >= cur_start)
-        if fetched_start < cur_start:
+        # values < start_dt.
+        # assert(fetched_start >= start_dt)
+        if fetched_start < start_dt:
             log.warn('KNOWN BUG: HISTORIC RATES fetched_start < cur_start')
             log.warn('fetched_start: ' + fetched_start.isoformat())
-            log.warn('cur_start: ' + cur_start.isoformat())
-        assert(fetched_end <= cur_end)
+            log.warn('start_dt: ' + start_dt.isoformat())
+        assert(fetched_end <= end_dt)
 
     return rates, resp

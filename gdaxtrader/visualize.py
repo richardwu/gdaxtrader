@@ -9,6 +9,7 @@ import copy
 
 import common
 import timeseries as ts
+import ratesutil
 
 _plot_dir = 'plots'
 
@@ -42,12 +43,7 @@ def hist_rates(rates, product=None, savetofile=True, movavg_windows=[], bbands_w
     fname_prefix = 'hist_rate'
 
     # Sort by timestamp
-    ratesdf = pd.DataFrame(rates, columns=['unixTS', 'low', 'high', 'open', 'close', 'vol'])
-    # Convert to datetime objects
-    ratesdf['datetime'] = pd.to_datetime(ratesdf.unixTS, unit='s')
-    # Sort in ascending
-    ratesdf.sort_values(by='datetime', inplace=True)
-    ratesdf.reset_index(drop=True, inplace=True)
+    ratesdf = ratesutil.to_df(rates)
 
     # Main candlestick plot.
     data = [dict(
